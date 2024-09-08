@@ -2,9 +2,10 @@ import { Stack } from 'expo-router';
 import { View, Text, Image } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 
-function EventListItem({ data }) {
-  const { title, datetime, location, image } = data;
-  console.log(data);
+import { EventListItemProps } from '@/types/types';
+
+const EventListItem = ({ item }: EventListItemProps) => {
+  const { title, datetime, location, image } = item;
   return (
     <>
       <Stack.Screen options={{ title: 'Events' }} />
@@ -22,13 +23,13 @@ function EventListItem({ data }) {
         </View>
 
         <View className="flex-row gap-3">
-          <Text className="text-grey-500 mr-auto">16 Going</Text>
+          <Text className="text-grey-500 mr-auto">88 Going</Text>
           <Feather name="share" size={20} color="grey" />
           <Feather name="save" size={24} color="grey" />
         </View>
       </View>
     </>
   );
-}
+};
 
 export default EventListItem;

@@ -1,11 +1,17 @@
 import { FlatList } from 'react-native';
 
-import EventListItem from '~/components/EventListItem';
 import events from '../../assets/events.json';
+import useEvents from '@/hooks/useEvents';
 
 export default function Events() {
-  const listItem = ({ item }) => {
-    return <EventListItem data={item} />;
-  };
-  return <FlatList data={events} renderItem={listItem} keyExtractor={(item) => item.id} />;
+  const { listItem } = useEvents();
+
+  return (
+    <FlatList
+      className="bg-white"
+      data={events}
+      renderItem={listItem}
+      keyExtractor={(item) => item.id}
+    />
+  );
 }
