@@ -1,9 +1,10 @@
-import { Link, Tabs } from 'expo-router';
+import { Link, Redirect, Tabs } from 'expo-router';
 
 import { HeaderButton } from '../../components/HeaderButton';
 import { TabBarIcon } from '../../components/TabBarIcon';
 
 export default function TabLayout() {
+  return <Redirect href="/login" />;
   return (
     <Tabs
       screenOptions={{

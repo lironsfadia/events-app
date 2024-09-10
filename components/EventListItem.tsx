@@ -17,7 +17,7 @@ const EventListItem = ({ item }: EventListItemProps) => {
       <Stack.Screen options={{ title: 'Events' }} />
       <Link
         href={{
-          pathname: '/(event)/[id]',
+          pathname: '/[id]',
           params: { id: id },
         }}
         asChild>
