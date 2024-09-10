@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import events from '../../assets/events.json';
 import { formatDate } from '@/utils/date';
 
@@ -29,6 +29,13 @@ function EventScreen() {
       </Text>
       <Text className="text-lg font-semibold uppercase text-amber-700">{time}</Text>
       <Text className="mt-1 text-lg">{description}</Text>
+
+      <View className="border-grey-100 absolute bottom-1 left-0 right-0 flex-1 flex-row items-center justify-between border-t-2 bg-white p-5">
+        <Text className="p-3 text-xl font-semibold">Free</Text>
+        <Pressable className="rounded-md bg-red-400 p-5">
+          <Text className="font-bold text-white">Join and RSVP</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
