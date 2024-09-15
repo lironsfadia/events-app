@@ -4,6 +4,8 @@ import Feather from '@expo/vector-icons/Feather';
 
 import { EventListItemProps } from '@/types/types';
 import { formatDate } from '@/utils/date';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/utils/supabase';
 
 // 1- View can't handle press event, that's why Pressable is used
 // 2- Link's asChild prop is added to the Link component to
@@ -11,6 +13,18 @@ import { formatDate } from '@/utils/date';
 
 const EventListItem = ({ item }: EventListItemProps) => {
   const { id, title, date, location, image_uri } = item;
+  const [numberOfAttendees, setNumberOfAttendees] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchAttendanceNumber = async () => {
+      let { count: attendeesNumber, error } = await supabase
+        .from('attendance')
+        .select('*', { count: 'exact', head: true })
+        .eq('event_id', id);
+      setNumberOfAttendees(attendeesNumber);
+    };
+    fetchAttendanceNumber();
+  }, []);
 
   const time = formatDate(date);
   return (
@@ -18,7 +32,7 @@ const EventListItem = ({ item }: EventListItemProps) => {
       <Stack.Screen options={{ title: 'Events' }} />
       <Link
         href={{
-          pathname: '/[id]',
+          pathname: '/event/[id]',
           params: { id: id },
         }}
         asChild>
@@ -37,7 +51,7 @@ const EventListItem = ({ item }: EventListItemProps) => {
           </View>
 
           <View className="flex-row gap-3">
-            <Text className="text-grey-500 mr-auto">88 Going</Text>
+            <Text className="text-grey-500 mr-auto">{numberOfAttendees} Going</Text>
             <Feather name="share" size={20} color="grey" />
             <Feather name="save" size={20} color="grey" />
           </View>
