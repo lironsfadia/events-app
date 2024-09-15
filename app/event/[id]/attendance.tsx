@@ -21,6 +21,7 @@ const Attendance = () => {
         setError(e);
       }
     };
+
     const fetchAttendees = async () => {
       try {
         setLoading(true);
