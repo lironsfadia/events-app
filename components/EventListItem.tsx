@@ -10,8 +10,9 @@ import { formatDate } from '@/utils/date';
 // prevent style breaking
 
 const EventListItem = ({ item }: EventListItemProps) => {
-  const { id, title, datetime, location, image } = item;
-  const time = formatDate(datetime);
+  const { id, title, date, location, image_uri } = item;
+
+  const time = formatDate(date);
   return (
     <>
       <Stack.Screen options={{ title: 'Events' }} />
@@ -32,7 +33,7 @@ const EventListItem = ({ item }: EventListItemProps) => {
               <Text className="text-md text-grey-700">{location}</Text>
             </View>
 
-            <Image source={{ uri: image }} className="aspect-video w-2/5 rounded-xl" />
+            <Image source={{ uri: image_uri }} className="aspect-video w-2/5 rounded-xl" />
           </View>
 
           <View className="flex-row gap-3">

@@ -1,12 +1,33 @@
+import { useEffect, useState } from 'react';
+
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { View, Text, Image, Pressable } from 'react-native';
-import events from '../../assets/events.json';
+import { View, Text, Image, Pressable, ActivityIndicator } from 'react-native';
 import { formatDate } from '@/utils/date';
+import { supabase } from '@/utils/supabase';
 
 function EventScreen() {
   const { id } = useLocalSearchParams();
-  const event = events.find((event) => event.id === id);
+  const [event, setEvent] = useState<any | null>(null);
+  const [error, setError] = useState<unknown | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+        let { data, error } = await supabase.from('events').select('*').eq('id', id).single();
+        setEvent(data);
+        setLoading(false);
+      } catch (e: unknown) {
+        setError(e);
+      }
+    };
 
+    fetchEvent();
+  }, [id]);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
   if (!event) {
     return (
       <View className="flex-1 items-center justify-center">
@@ -15,20 +36,20 @@ function EventScreen() {
     );
   }
 
-  const { title, image, datetime, description } = event;
-  const time = formatDate(datetime);
+  const { title, image_uri, date, desc } = event;
+  const time = formatDate(date);
 
   return (
     <View className="flex-1 bg-white p-3">
       <Stack.Screen
         options={{ title: 'Event', headerBackTitleVisible: false, headerTintColor: 'black' }}
       />
-      <Image className="aspect-video w-full" source={{ uri: image }} />
+      <Image className="aspect-video w-full" source={{ uri: image_uri }} />
       <Text className="mt-1 text-3xl font-bold" numberOfLines={2}>
         {title}
       </Text>
       <Text className="text-lg font-semibold uppercase text-amber-700">{time}</Text>
-      <Text className="mt-1 text-lg">{description}</Text>
+      <Text className="mt-1 text-lg">{desc}</Text>
 
       <View className="border-grey-100 absolute bottom-1 left-0 right-0 flex-1 flex-row items-center justify-between border-t-2 bg-white p-5">
         <Text className="p-3 text-xl font-semibold">Free</Text>

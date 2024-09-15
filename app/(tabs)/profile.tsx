@@ -1,3 +1,4 @@
+import Avatar from '@/components/Avatar';
 import { useAuth } from '@/contexts/AuthProvider';
 import { supabase } from '@/utils/supabase';
 import { Stack } from 'expo-router';
@@ -48,12 +49,12 @@ export default function Home() {
 
   async function updateProfile({
     username,
-    fullName,
+    full_name,
     website,
     avatar_url,
   }: {
     username: string;
-    fullName: string;
+    full_name: string;
     website: string;
     avatar_url: string;
   }) {
@@ -64,7 +65,7 @@ export default function Home() {
       const updates = {
         id: session?.user.id,
         username,
-        full_name: fullName,
+        full_name,
         website,
         avatar_url,
         updated_at: new Date(),
@@ -77,7 +78,7 @@ export default function Home() {
       }
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message);
+        Alert.alert(`Error!: ${error.message}`);
       }
     } finally {
       setLoading(false);
@@ -86,6 +87,15 @@ export default function Home() {
   return (
     <View className="flex-1 gap-3 bg-white p-4">
       <Stack.Screen options={{ title: 'Profile' }} />
+
+      <Avatar
+        size={200}
+        url={avatarUrl}
+        onUpload={(url: string) => {
+          setAvatarUrl(url);
+          updateProfile({ username, website, avatar_url: url });
+        }}
+      />
 
       <TextInput
         editable={false}
@@ -121,7 +131,9 @@ export default function Home() {
 
       <Pressable
         className="items-center rounded-md border-2 border-blue-400 p-5 px-8"
-        onPress={() => updateProfile({ username, website, avatar_url: avatarUrl, fullName })}
+        onPress={() =>
+          updateProfile({ username, website, avatar_url: avatarUrl, full_name: fullName })
+        }
         disabled={loading}>
         <Text className="font-bold text-blue-500 ">Save</Text>
       </Pressable>

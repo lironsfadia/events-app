@@ -1,9 +1,9 @@
 export interface Event {
   id: string;
   title: string;
-  datetime: string;
+  date: string;
   location: string;
-  image: string;
+  image_uri: string;
 }
 
 export interface ListItem {
