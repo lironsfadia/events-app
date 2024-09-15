@@ -1,5 +1,5 @@
 import { supabase } from '@/utils/supabase';
-import { Session } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 
