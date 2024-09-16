@@ -1,9 +1,10 @@
+import { Button } from 'react-native';
 import { Link, Redirect, Tabs } from 'expo-router';
 
 import { HeaderButton } from '../../components/HeaderButton';
 import { TabBarIcon } from '../../components/TabBarIcon';
 import { useAuth } from '@/contexts/AuthProvider';
-import { Button } from 'react-native';
+
 import { supabase } from '@/utils/supabase';
 
 export default function TabLayout() {

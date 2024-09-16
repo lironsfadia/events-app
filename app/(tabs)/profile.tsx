@@ -1,89 +1,27 @@
+import { Pressable, TextInput, View, Text } from 'react-native';
+import { Stack } from 'expo-router';
+
 import Avatar from '@/components/Avatar';
 import { useAuth } from '@/contexts/AuthProvider';
-import { supabase } from '@/utils/supabase';
-import { Stack } from 'expo-router';
-import { useState, useEffect } from 'react';
-import { Alert, Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
+import useEvents from '@/hooks/useEvents';
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [website, setWebsite] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const {
+    listItem,
+    loading,
+    username,
+    setUsername,
+    fullName,
+    setFullName,
+    website,
+    setWebsite,
+    avatarUrl,
+    setAvatarUrl,
+    updateProfile,
+  } = useEvents();
 
   const { session, user } = useAuth();
 
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
-  async function getProfile() {
-    try {
-      setLoading(true);
-      if (!user) throw new Error('No user on the session!');
-
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url, full_name`)
-        .eq('id', session?.user.id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
-        setFullName(data.full_name);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function updateProfile({
-    username,
-    full_name,
-    website,
-    avatar_url,
-  }: {
-    username: string;
-    full_name: string;
-    website: string;
-    avatar_url: string;
-  }) {
-    try {
-      setLoading(true);
-      if (!session?.user) throw new Error('No user on the session!');
-
-      const updates = {
-        id: session?.user.id,
-        username,
-        full_name,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-
-      const { error } = await supabase.from('profiles').upsert(updates);
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(`Error!: ${error.message}`);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
     <View className="flex-1 gap-3 bg-white p-4">
       <Stack.Screen options={{ title: 'Profile' }} />
@@ -140,18 +78,3 @@ export default function Home() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});

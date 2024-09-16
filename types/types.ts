@@ -4,6 +4,7 @@ export interface Event {
   date: string;
   location: string;
   image_uri: string;
+  desc: string;
 }
 
 export interface ListItem {

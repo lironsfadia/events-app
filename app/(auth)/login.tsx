@@ -1,38 +1,12 @@
-import { supabase } from '@/utils/supabase';
+import React from 'react';
+import { View, TextInput, Pressable, Text } from 'react-native';
 import { Stack } from 'expo-router';
-import React, { useState } from 'react';
-import { Alert, Button, View, TextInput, Pressable, Text } from 'react-native';
+
+import useLogin from '@/hooks/useLogin';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert(error.message);
-    setLoading(false);
-  }
-
-  async function signUpWithEmail() {
-    setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert(error.message);
-    if (!session) Alert.alert('Please check your inbox for email verification!');
-    setLoading(false);
-  }
+  const { setEmail, email, setPassword, password, signInWithEmail, loading, signUpWithEmail } =
+    useLogin();
 
   return (
     <View className="mt-10 flex-1 gap-3 bg-white p-4 pt-10">
